@@ -90,12 +90,13 @@ void GraphWidget::GraphNodeRemove( SessionItem Session )
             GraphScene->removeItem( NodeList[ i ]->Node->NodeEdge );
             GraphScene->removeItem( NodeList[ i ]->Node );
 
-            NodeList.erase( NodeList.begin() + i );
             MainNode->Node->removeChild( NodeList[ i ]->Node );
 
             /* delete NodeList[ i ]->Node->NodeEdge;
             delete NodeList[ i ]->Node;
             delete NodeList[ i ]; */
+
+            NodeList.erase( NodeList.begin() + i );
 
             return;
         }
