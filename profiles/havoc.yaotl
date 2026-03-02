@@ -42,7 +42,7 @@ Demon {
 Listeners {
     Http {
         Name         = "Agent Listener - HTTP/s"
-        Hosts        = ["35.211.163.168"]
+        Hosts        = ["127.0.0.1"]
         HostBind     = "127.0.0.1"
         PortBind     = 8443
         PortConn     = 8443
@@ -77,3 +77,4 @@ Listeners {
         }
     }
 }
+
