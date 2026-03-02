@@ -12,37 +12,29 @@ import (
 func (db *DB) AgentAdd(agent *agent.Agent) error {
 
 	var err error
-	var AgentID int64
+	var AgentID uint32
 
-	AgentID, err = strconv.ParseInt(agent.NameID, 16, 32)
+	id, err := strconv.ParseUint(agent.NameID, 16, 32)
 	if err != nil {
 		return err
 	}
+	AgentID = uint32(id)
 
-	/* check if it's a new db */
 	if db.Existed() {
-
-		/* check if agent already exists */
 		if db.AgentExist(int(AgentID)) {
 			return nil
 		}
-
 	} else {
-
-		/* check if agent already exists */
 		if db.AgentExist(int(AgentID)) {
 			return errors.New(fmt.Sprintf("agent %x already exist in db", agent.NameID))
 		}
-
 	}
 
-	/* prepare some arguments to execute for the sqlite db */
 	stmt, err := db.db.Prepare("INSERT INTO TS_Agents ( AgentID, Active, Reason, AESKey, AESIv, Hostname, Username, DomainName, ExternalIP, InternalIP, ProcessName, BaseAddress, ProcessPID, ProcessTID, ProcessPPID, ProcessArch, Elevated, OSVersion, OSArch, SleepDelay, SleepJitter, KillDate, WorkingHours, FirstCallIn, LastCallIn) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	if err != nil {
 		return err
 	}
 
-	/* add the data to the agent table */
 	_, err = stmt.Exec(
 		int(AgentID),
 		1,
@@ -74,27 +66,25 @@ func (db *DB) AgentAdd(agent *agent.Agent) error {
 	}
 
 	stmt.Close()
-
 	return nil
 }
 
 func (db *DB) AgentUpdate(agent *agent.Agent) error {
 
 	var err error
-	var AgentID int64
+	var AgentID uint32
 	var active int
 
-	AgentID, err = strconv.ParseInt(agent.NameID, 16, 32)
+	id, err := strconv.ParseUint(agent.NameID, 16, 32)
 	if err != nil {
 		return err
 	}
+	AgentID = uint32(id)
 
-	/* check if agent already exists */
 	if db.AgentExist(int(AgentID)) == false {
 		return errors.New("Agent does not exist")
 	}
 
-	/* prepare some arguments to execute for the sqlite db */
 	stmt, err := db.db.Prepare("UPDATE TS_Agents SET Active = ?, Reason = ?, AESKey = ?, AESIv = ?, Hostname = ?, Username = ?, DomainName = ?, ExternalIP = ?, InternalIP = ?, ProcessName = ?, BaseAddress = ?, ProcessPID = ?, ProcessTID = ?, ProcessPPID = ?, ProcessArch = ?, Elevated = ?, OSVersion = ?, OSArch = ?, SleepDelay = ?, SleepJitter = ?, KillDate = ?, WorkingHours = ?, FirstCallIn = ?, LastCallIn = ? WHERE AgentID = ?")
 	if err != nil {
 		return err
@@ -106,7 +96,6 @@ func (db *DB) AgentUpdate(agent *agent.Agent) error {
 		active = 0
 	}
 
-	/* add the data to the agent table */
 	_, err = stmt.Exec(
 		active,
 		agent.Reason,
@@ -138,7 +127,6 @@ func (db *DB) AgentUpdate(agent *agent.Agent) error {
 	}
 
 	stmt.Close()
-
 	return nil
 }
 
