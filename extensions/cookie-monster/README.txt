@@ -1,0 +1,1 @@
+Copy chrome_debug.exe into the Chromium browser’s main directory, then inject the agent into it to allow decryption key extraction
