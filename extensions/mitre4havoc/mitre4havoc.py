@@ -8,7 +8,7 @@ import havocui
 import json
 import os 
 
-json_file = "/home/kali/Havoc/data/extensions/mitre4havoc/tactics.json"
+json_file = "extensions/mitre4havoc/tactics.json"
 tactics = []
 infos = {}
 
